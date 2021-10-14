@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  nginx-proxy:
+    restart: always
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  acme-companion:
+    restart: always
+    image: nginxproxy/acme-companion
+    environment:
+      DEFAULT_EMAIL: geisonbiazus@gmail.com
+    volumes:
+      - acme:/etc/acme.sh
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - nginx-proxy
+volumes:
+  vhost:
+  html:
+  certs:
+  acme:
