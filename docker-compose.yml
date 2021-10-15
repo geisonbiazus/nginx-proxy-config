@@ -12,6 +12,8 @@ services:
       - html:/usr/share/nginx/html
       - certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - docker-compose_default
 
   acme-companion:
     restart: always
@@ -23,8 +25,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     volumes_from:
       - nginx-proxy
+    networks:       
+      - docker-compose_default
 volumes:
   vhost:
   html:
   certs:
   acme:
+networks:
+  docker-compose_default:
+    external: true
+    name: docker-compose_default 
